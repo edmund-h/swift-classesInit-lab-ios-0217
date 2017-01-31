@@ -18,7 +18,20 @@ import Foundation
  */
 // write your code here
 
-
+class Person {
+    var firstName, lastName : String
+    var fullName : String
+    
+    init (firstName: String , lastName : String) {
+        self.firstName = firstName
+        self.lastName = lastName
+        self.fullName = firstName + " " + lastName
+    }
+    
+    func greet(_ person: Person) -> String {
+        return "Hello, \(person.firstName)!"
+    }
+}
 
 
 
@@ -39,7 +52,6 @@ assert(person.lastName == "Johnson", person.lastName)
  */
 
 
-
 // Test
 assert(person.fullName == "Alice Johnson", person.fullName)
 
@@ -51,11 +63,6 @@ assert(person.fullName == "Alice Johnson", person.fullName)
  
  You can add this method to the class definition you wrote in Question #1.
  */
-
-
-
-
-
 
 
 // Test
@@ -83,14 +90,25 @@ extension Double {
 
 // write your code here
 
-
-
-
-
-
-
-
-
+class Transaction {
+    
+    var type: String
+    var amount: Double
+    var description: String
+    
+    init (type : String , amount : Double) {
+        self.type = type
+        self.amount = amount
+        if type == "in" {
+            self.description = "Transaction: credit in the amount of $\(amount.toMoney)"
+        } else if type == "out" {
+            self.description = "Transaction: debit in the amount of $\(amount.toMoney)"
+        } else {
+            self.type = "error"
+            self.description = "Transaction: debit in the amount of $\(amount.toMoney)"
+        }
+    }
+}
 
 // Test
 let transaction1 = Transaction(type: "in", amount: 10.0)
@@ -109,15 +127,6 @@ assert(transaction2.amount == 1.2, "\(transaction2.amount)")
  Note that formatting `Double`s so they have two decimal places (like money) can be a bit difficult, so a method has been added to the `Double` class for you to help you with that. Assuming `amount` is a double, you can call `double.toMoney` to get a string that formats the `Double` to two decimal places.
  */
 
-
-
-
-
-
-
-
-
-
 // Test
 assert(transaction1.description == "Transaction: credit in the amount of $10.00", transaction1.description)
 assert(transaction2.description == "Transaction: debit in the amount of $1.20", transaction2.description)
@@ -134,14 +143,28 @@ assert(transaction2.description == "Transaction: debit in the amount of $1.20", 
  */
 // write your code here
 
-
-
-
-
-
-
-
-
+class BankAccount {
+    
+    var owner : Person
+    var transactions : [Transaction]
+    var balance : Double
+    init (owner : Person){
+        self.owner = owner
+        transactions = []
+        balance = 0
+    }
+    
+    func deposit (_ myDeposit : Double) {
+        let thisTransaction = Transaction (type: "in", amount: myDeposit)
+        transactions.append(thisTransaction)
+        balance += myDeposit
+    }
+    func withdraw (_ myWithdrawal : Double) {
+        let thisTransaction = Transaction (type: "out", amount: myWithdrawal)
+        transactions.append(thisTransaction)
+        balance -= myWithdrawal
+    }
+}
 
 // Test
 let personBankAccount = BankAccount(owner: person)
@@ -155,16 +178,6 @@ assert(personBankAccount.transactions.isEmpty)
  You need a way to for people to add money to their bank account. In the `BankAccount` class you created in Question #6, add a method called `deposit(_:)`. This method should take a `Double` representing the amount to be deposited into the account as a parameter. It should create a new `Transaction` object representing the deposit and add it to the `BankAccount`'s `transactions` array. This method does not need to return anything.
  */
 
-
-
-
-
-
-
-
-
-
-
 // Test
 personBankAccount.deposit(100.0)
 assert(personBankAccount.transactions.count == 1, "\(personBankAccount.transactions.count)")
@@ -177,15 +190,6 @@ assert(personBankAccount.transactions.count == 2, "\(personBankAccount.transacti
  
  The owner of the account also needs a way to take money out of their bank account. In the `BankAccount` class you created in Question #6, add a method called `withdraw(_:)`. This method should take a `Double` representing the amount to be withdrawn from the account as a parameter. It should create a new `Transaction` object representing the withdrawal and add it to the `BankAccount`'s `transactions` array. This method does not need to return anything.
  */
-
-
-
-
-
-
-
-
-
 
 // Test
 personBankAccount.withdraw(25.0)
